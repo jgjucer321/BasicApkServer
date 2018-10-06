@@ -67,7 +67,7 @@ public class DirListener extends Thread {
 	}
 	
 	private void startNewThread(Path context) {
-		String path = this.file.getPath() + '\\' + context.getFileName();
+		String path = this.file.getPath() + '/' + context.getFileName();
 		new ApkHandler(path).start();
 		
 	}

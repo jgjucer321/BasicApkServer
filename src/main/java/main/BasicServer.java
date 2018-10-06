@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import com.sun.net.httpserver.HttpExchange;
 
 
@@ -12,7 +15,7 @@ public class BasicServer {
 	
 	public int port;
 	public static int unAckedApks;
-	public static List <String> metaData = new ArrayList<String>();
+	public static Queue<String> metaData = new LinkedBlockingQueue<String>();
 	
 	public BasicServer(int port) {
 		this.port = port;
@@ -45,11 +48,10 @@ public class BasicServer {
 	}
 	public static void sendJson(HttpExchange exchange) throws IOException{
 		String response = "";
-		for(String responses: metaData) {
-			response += responses;
-			response += "\n";
+		if(!metaData.isEmpty()) {
+			 response = metaData.peek();
 		}
-		metaData.clear();
+		else response = "";
 		exchange.sendResponseHeaders(200, response.getBytes().length);
 		OutputStream os = exchange.getResponseBody();
 		os.write(response.getBytes());
