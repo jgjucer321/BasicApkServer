@@ -15,7 +15,7 @@ import main.DirListener;
 public class BasicServer {
 
 	public static void main(String[] args) {
-		
+		/*
 		try {
 			HttpServer server = HttpServer.create(new InetSocketAddress(13337), 0);
 			HttpContext context = server.createContext("/");
@@ -24,13 +24,14 @@ public class BasicServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		*/
 		DirListener dl = null;
 		if(args.length > 0) {
 			File file = new File(args[0]);
 			
 			dl = new DirListener(file);
 			dl.start();
+			System.out.println("listening on " + "\"" + file.getAbsolutePath() + "\"...");
 		}
 		else {
 			System.out.println("no arguments found. exiting program.");

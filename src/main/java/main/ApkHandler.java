@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.Base64;
 
 import net.dongliu.apk.parser.ApkFile;
@@ -34,9 +35,11 @@ public class ApkHandler extends Thread{
 		System.out.println(apkMetaObj.toJson());
 		
 		}
-		catch(IOException e){
-			e.printStackTrace();
+		catch(IOException e) {
+			System.out.println("file is no valid .apk or is corrupted. interrupting thread");
+			this.interrupt();
 		}
+		
 		
 
 	}

@@ -27,6 +27,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     compile 'net.dongliu:apk-parser:2.6.2'
     compile 'org.nd4j:jackson:1.0.0-beta2'
-    compile 'org.glassfish.main.packager:jersey:5.0'
+    compile 'com.opsbears.webcomponents.webserver:jetty:1.0.0-alpha13'
 }
 
