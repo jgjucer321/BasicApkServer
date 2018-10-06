@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.util.Base64;
+import java.util.List;
 
 import net.dongliu.apk.parser.ApkFile;
 import net.dongliu.apk.parser.bean.ApkMeta;
@@ -13,7 +14,7 @@ public class ApkHandler extends Thread{
 
 	private String filepath;
 	
-	
+	 
 	public ApkHandler(String path) {
 		this.filepath = path;
 		
@@ -32,8 +33,9 @@ public class ApkHandler extends Thread{
 		int NrOfPermissions = apkMeta.getUsesPermissions().size();
 		
 		ApkMetadata apkMetaObj = new ApkMetadata(Packagename, NrOfPermissions,iconData);
-		System.out.println(apkMetaObj.toJson());
-		
+		String response = apkMetaObj.toJson();
+		System.out.println(response);
+		BasicServer.metaData.add(response);
 		}
 		catch(IOException e) {
 			System.out.println("file is no valid .apk or is corrupted. interrupting thread");

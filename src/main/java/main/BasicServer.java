@@ -1,50 +1,58 @@
 package main;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
-
-import com.sun.net.httpserver.HttpContext;
+import java.util.ArrayList;
+import java.util.List;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
-
-import main.DirListener;
 
 
 public class BasicServer {
-
-	public static void main(String[] args) {
-		/*
-		try {
-			HttpServer server = HttpServer.create(new InetSocketAddress(13337), 0);
-			HttpContext context = server.createContext("/");
-			context.setHandler(BasicServer::handle);
-			server.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
-		DirListener dl = null;
-		if(args.length > 0) {
-			File file = new File(args[0]);
-			
-			dl = new DirListener(file);
-			dl.start();
-			System.out.println("listening on " + "\"" + file.getAbsolutePath() + "\"...");
-		}
-		else {
-			System.out.println("no arguments found. exiting program.");
-			System.exit(1);
-		}
+	
+	public int port;
+	public static int unAckedApks;
+	public static List <String> metaData = new ArrayList<String>();
+	
+	public BasicServer(int port) {
+		this.port = port;
 	}
 	
-	public static void handle(HttpExchange exchange) throws IOException {
-		String response = "I work";
+	public static void incrUnackedApks() {
+		unAckedApks++;
+	}
+	
+	public static int getUnAckedApks() {
+		return unAckedApks;
+	}
+	
+	public  int getPort() {
+		return this.port;
+	}
+	
+	public static void resetAcks() {
+		unAckedApks = 0;
+	}
+	
+	public static void handleInit(HttpExchange exchange) throws IOException {
+		String response = String.valueOf(getUnAckedApks());
+		resetAcks();
 		exchange.sendResponseHeaders(200, response.getBytes().length);
 		OutputStream os = exchange.getResponseBody();
 		os.write(response.getBytes());
 		os.close();
 		
+	}
+	public static void sendJson(HttpExchange exchange) throws IOException{
+		String response = "";
+		for(String responses: metaData) {
+			response += responses;
+			response += "\n";
+		}
+		metaData.clear();
+		exchange.sendResponseHeaders(200, response.getBytes().length);
+		OutputStream os = exchange.getResponseBody();
+		os.write(response.getBytes());
+		os.close();
 	}
 }

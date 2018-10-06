@@ -9,8 +9,8 @@ import java.util.List;
 
 public class DirListener extends Thread {
 
-	File file;
-	DirListener(File file)
+	public File file;
+	public DirListener(File file)
 	{
 		this.file = file;
 	}
@@ -45,6 +45,7 @@ public class DirListener extends Thread {
 				if(kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
 					if(extension(context.getFileName().toString()).equals("apk")) {
 						System.out.println(".apk file created. parsing...");
+						BasicServer.incrUnackedApks();
 						startNewThread(context);
 					}
 					else {
